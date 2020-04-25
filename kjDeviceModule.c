@@ -4,10 +4,7 @@
 #include <linux/cdev.h>
 #include <linux/semaphore.h>
 #include <asm/uaccess.h>
-struct cdev *mcdev; //creat new character device
-int major_number;
-int ret;
-dev_t dev_num;
+#include <linux/uaccess.h>
 
 //Introduce fake device
 struct kj_device
@@ -16,7 +13,10 @@ struct kj_device
 	struct semaphore sem;
 }virtual_device;
 
-
+struct cdev *mcdev; //creat new character device
+int major_number;
+int ret;
+dev_t dev_num;
 
 #define DEVICE_NAME "kjDevice"
 
@@ -34,14 +34,14 @@ int device_open(struct inode *inode, struct file* file)
 ssize_t device_read(struct file* filp,char* bufStoreData,size_t bufCount, loff_t *curOffset)
 {
 		printk(KERN_INFO "kj_device:Reading from device");
-		ret = raw_copy_to_user(bufStoreData,virtual_device.data,bufCount);
+		ret = copy_to_user(bufStoreData,virtual_device.data,bufCount);
 		return ret;
 }
 
 ssize_t device_write(struct file* filp,const char* bufSourceData,size_t bufCount, loff_t *curOffset)
 {
 		printk(KERN_INFO "kj_device:Writing to device");
-		ret = raw_copy_from_user(virtual_device.data,bufSourceData,bufCount);
+		ret = copy_from_user(virtual_device.data,bufSourceData,bufCount);
 		return ret;
 }
 
@@ -81,10 +81,11 @@ static int driver_entry(void)
 	ret = cdev_add(mcdev,dev_num,1);
    	
 	if(ret<0)
-        {
-        	  printk(KERN_ALERT "kj_device ERR,Unable to add cdev to kernel");
-                  return ret;
-        }
+	{
+		printk(KERN_ALERT "kj_device ERR,Unable to add cdev to kernel");
+		return ret;
+	}
+	sema_init(&virtual_device.sem,1);
 
 	return 0;
 }
@@ -93,6 +94,7 @@ static void driver_exit(void)
 {
 	cdev_del(mcdev);
 	unregister_chrdev_region(dev_num,1);
+	printk(KERN_INFO "kj_device UNLOAD module");
 		
 }
 

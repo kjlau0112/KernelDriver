@@ -9,7 +9,7 @@
 int main()
 {
     int i,fd;
-    char opt,write_buff[10],read_buff[10];
+    char opt,write_buff[100],read_buff[100];
 
     fd = open(DEVICE,O_RDWR);
 
