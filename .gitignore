@@ -1,0 +1,17 @@
+        .kjDeviceModule.ko.cmd
+        .kjDeviceModule.mod.cmd
+        .kjDeviceModule.mod.o.cmd
+        .kjDeviceModule.o.cmd
+        Module.symvers
+        a.out
+        kjDeviceModule.ko
+        kjDeviceModule.mod
+        kjDeviceModule.mod.c
+        kjDeviceModule.mod.o
+        kjDeviceModule.o
+        modules.order
+        .gitignore
+        .kjDeviceModule.ko.cmd
+        .kjDeviceModule.mod.cmd
+        .kjDeviceModule.mod.o.cmd
+        .kjDeviceModule.o.cmd 

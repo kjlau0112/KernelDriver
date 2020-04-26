@@ -5,7 +5,11 @@
 #include <linux/semaphore.h>
 #include <asm/uaccess.h>
 #include <linux/uaccess.h>
-
+#include <linux/ioctl.h>
+#define MAJOR_NUM 239
+#define IOCTL_SETMIXED _IO(MAJOR_NUM,0)
+#define IOCTL_SETUPPER _IO(MAJOR_NUM,1)
+static int mode ;
 //Introduce fake device
 struct kj_device
 {
@@ -20,6 +24,24 @@ dev_t dev_num;
 
 #define DEVICE_NAME "kjDevice"
 
+long hello_ioctl(struct file* flip, unsigned int ioctNum, unsigned long ioctl_param)
+{
+	switch(ioctNum)
+	{
+		case IOCTL_SETMIXED:
+		mode =0;
+		break;
+		case IOCTL_SETUPPER:
+		mode =1;
+		break;
+
+		default:
+		mode = -1;
+		break;
+	}
+	printk(KERN_INFO "IOCTL mode %d\n",mode);
+	return 0;
+}
 int device_open(struct inode *inode, struct file* file)
 {
 	if(down_interruptible(&virtual_device.sem)!=0)
@@ -58,7 +80,9 @@ struct file_operations fops =
 	.open = device_open,
 	.release = device_close,
 	.write = device_write,
-	.read = device_read	
+	.read = device_read,
+	.unlocked_ioctl =hello_ioctl
+
 };
 
 
