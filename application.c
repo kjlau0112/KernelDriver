@@ -40,6 +40,11 @@ int main(int argc, char **argv)
             }
             else
             {
+                if(read_buff == NULL)
+                {
+                     printf("Buffer have no data\n");
+                }
+
                 printf("device: %s\n", read_buff);
             }
             break;
