@@ -1,3 +1,10 @@
 # KernelDriver
 Kick start Kernel Driver
+
 Credit youtube video: https://www.youtube.com/watch?v=_4H-F_5yDvo
+
+WARNING DO NOT ATTEMPT TO CHANGE THE SOURCE CODE AND TEST IT ON COOPERATE
+MACHINE!
+
+NULL PONTER DEREFERENCING MAY RESULT YOUR  HOST MACHINE TO BEHAVE 
+UNRESPONSIVE!
